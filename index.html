@@ -103,11 +103,12 @@
         }
 
         .results {
-            background: #f8f9fa;
+            background: #ffffff !important;
             padding: 40px;
             margin-top: 20px;
             border-radius: 15px;
             display: none;
+            border: 2px solid #e0e0e0;
         }
 
         .results.show {
@@ -123,11 +124,11 @@
         .ticker {
             font-size: 2em;
             font-weight: bold;
-            color: #2c3e50;
+            color: #2c3e50 !important;
             text-align: center;
             margin-bottom: 20px;
             padding: 15px;
-            background: white;
+            background: #f8f9fa !important;
             border-radius: 10px;
             border-left: 5px solid #667eea;
         }
@@ -145,21 +146,21 @@
 
         .metric-label {
             font-weight: bold;
-            color: #2c3e50;
+            color: #2c3e50 !important;
         }
 
         .metric-value {
-            color: #27ae60;
+            color: #27ae60 !important;
             font-weight: bold;
         }
 
         .warning {
-            background: #fff3cd;
-            border: 1px solid #ffeaa7;
+            background: #fff3cd !important;
+            border: 2px solid #ffeaa7 !important;
             border-radius: 10px;
             padding: 20px;
             margin-top: 20px;
-            color: #856404;
+            color: #856404 !important;
         }
 
         .share-section {
@@ -389,7 +390,7 @@
 
                 // Create ticker with spaces converted to underscores (Fixed the extra brace)
                 const cleanTickerName = tickerName.replace(/\s+/g, '_');
-                const ticker = `${cleanTickerName.toUpperCase()}`;
+                const ticker = `$${cleanTickerName.toUpperCase()}`;
 
                 // Update display
                 document.getElementById('displayTicker').textContent = ticker;
@@ -492,19 +493,56 @@
                 shareSection.style.display = 'none';
             }
 
-            // Force a small delay to ensure DOM is fully updated
+            // Force styles to be fully applied and wait longer
             setTimeout(() => {
-                // Generate the image with better settings for styling
+                // Enhanced html2canvas configuration for better quality
                 html2canvas(resultsElement, {
-                    backgroundColor: '#f8f9fa',
-                    scale: 2,
+                    backgroundColor: '#ffffff',
+                    scale: 3, // Higher scale for better quality
                     useCORS: true,
-                    allowTaint: true,
-                    logging: false,
+                    allowTaint: false,
+                    logging: true, // Enable logging to debug
                     width: resultsElement.scrollWidth,
                     height: resultsElement.scrollHeight,
-                    foreignObjectRendering: false, // Better font rendering
-                    imageTimeout: 15000 // Longer timeout
+                    foreignObjectRendering: true, // Try both settings
+                    imageTimeout: 30000, // Longer timeout
+                    removeContainer: false,
+                    async: true,
+                    letterRendering: true, // Better text rendering
+                    onclone: function(clonedDoc) {
+                        // Force styles in the cloned document
+                        const clonedResults = clonedDoc.getElementById('calculationResults');
+                        if (clonedResults) {
+                            clonedResults.style.background = '#ffffff';
+                            clonedResults.style.color = '#000000';
+                            
+                            // Force all text colors
+                            const labels = clonedResults.querySelectorAll('.metric-label');
+                            labels.forEach(label => {
+                                label.style.color = '#2c3e50';
+                                label.style.fontWeight = 'bold';
+                            });
+                            
+                            const values = clonedResults.querySelectorAll('.metric-value');
+                            values.forEach(value => {
+                                value.style.color = '#27ae60';
+                                value.style.fontWeight = 'bold';
+                            });
+                            
+                            const ticker = clonedResults.querySelector('.ticker');
+                            if (ticker) {
+                                ticker.style.color = '#2c3e50';
+                                ticker.style.background = '#f8f9fa';
+                            }
+                            
+                            const warning = clonedResults.querySelector('.warning');
+                            if (warning) {
+                                warning.style.background = '#fff3cd';
+                                warning.style.color = '#856404';
+                                warning.style.border = '2px solid #ffeaa7';
+                            }
+                        }
+                    }
                 }).then(canvas => {
                     console.log('Image generated successfully');
                     
@@ -516,7 +554,7 @@
                     // Download the image
                     const link = document.createElement('a');
                     link.download = `${window.calculationData.tickerName}_IPO_Results.png`;
-                    link.href = canvas.toDataURL('image/png');
+                    link.href = canvas.toDataURL('image/png', 1.0); // Maximum quality
                     document.body.appendChild(link);
                     link.click();
                     document.body.removeChild(link);
@@ -528,14 +566,14 @@
                     }
                     alert('Error generating image: ' + error.message);
                 });
-            }, 100); // Small delay to ensure styling is applied
+            }, 500); // Longer delay to ensure all styles are applied
         }
 
         function shareResults() {
             if (!window.calculationData) return;
             
             const { ticker, sharePrice, marketCap } = window.calculationData;
-            const text = `I just IPO'd myself! 📈\n\nTicker: ${ticker}\nShare Price: $${sharePrice.toFixed(2)}\nMarket Cap: $${marketCap.toLocaleString()}\n\nCalculate your own market value: https://nodumbideas.github.io/personal-ipo-calculator/`;
+            const text = `I just IPO'd myself! 📈\n\nTicker: $${ticker}\nShare Price: $${sharePrice.toFixed(2)}\nMarket Cap: $${marketCap.toLocaleString()}\n\nCalculate your own market value: https://nodumbideas.github.io/personal-ipo-calculator/`;
             const url = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(text);
             window.open(url, '_blank');
         }
@@ -544,7 +582,7 @@
             if (!window.calculationData) return;
             
             const { ticker, sharePrice, marketCap, tickerName } = window.calculationData;
-            const text = `I just IPO'd myself! 📈\n\nTicker: ${ticker}\nShare Price: $${sharePrice.toFixed(2)}\nMarket Cap: $${marketCap.toLocaleString()}\n\nCalculate your own market value: https://nodumbideas.github.io/personal-ipo-calculator/`;
+            const text = `I just IPO'd myself! 📈\n\nTicker: $${ticker}\nShare Price: $${sharePrice.toFixed(2)}\nMarket Cap: $${marketCap.toLocaleString()}\n\nCalculate your own market value: https://nodumbideas.github.io/personal-ipo-calculator/`;
             
             navigator.clipboard.writeText(text).then(() => {
                 alert('Results copied to clipboard!');
