@@ -328,7 +328,7 @@
             try {
                 console.log('Starting calculation...');
                 
-                // Get all form values with completely different approach
+                // Get all form values
                 const tickerName = document.getElementById('tickerName').value.trim() || 'DOE';
                 const salary = parseFloat(document.getElementById('annualSalary').value) || 0;
                 const age = parseInt(document.getElementById('currentAge').value) || 30;
@@ -355,9 +355,9 @@
                 let currentSalary = salary;
                 
                 for (let year = 0; year < yearsLeft; year++) {
-                    const dividendPayment = currentSalary * (dividendPercent / 100); // Only the dividend portion
+                    const dividendPayment = currentSalary * (dividendPercent / 100);
                     const discountFactor = Math.pow(1 + discountRate, year + 1);
-                    totalValue += dividendPayment / discountFactor; // Present value of dividends
+                    totalValue += dividendPayment / discountFactor;
                     currentSalary *= (1 + growthRate);
                 }
 
@@ -386,7 +386,6 @@
                 const marketCap = totalValue * multiplier;
                 const sharePrice = marketCap / 1000000;
                 const annualDividend = salary * (dividendPercent / 100);
-                const dividendYield = (annualDividend / sharePrice) * 100;
 
                 // Create ticker with spaces converted to underscores
                 const cleanTickerName = tickerName.replace(/\s+/g, '_');
@@ -400,7 +399,7 @@
                 document.getElementById('displayRetirement').textContent = yearsLeft;
 
                 // Generate warning
-                const warningText = createWarning(marketCap, sharePrice, industry, education, age, dividendPercent);
+                const warningText = createWarning(marketCap, sharePrice, industry, education, age, dividendPercent, growth);
                 document.getElementById('displayWarning').innerHTML = warningText;
 
                 // Show results
@@ -423,14 +422,13 @@
             }
         }
 
-        function createWarning(marketCap, sharePrice, industry, education, age, dividendPercent) {
+        function createWarning(marketCap, sharePrice, industry, education, age, dividendPercent, growth) {
             const warnings = [];
 
-        if (marketCap < 50000) {
-        const controllingStakeValue = sharePrice * 500000;
-        warnings.push("🚨 <strong>Low Valuation Risk:</strong> At your current share price, your mother could acquire a controlling stake for just $" + controllingStakeValue.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 2}) + ". Consider anti-takeover provisions.");
-        }
-
+            if (marketCap < 50000) {
+                const controllingStakeValue = sharePrice * 500000;
+                warnings.push("🚨 <strong>Low Valuation Risk:</strong> At your current share price, your mother could acquire a controlling stake for just $" + controllingStakeValue.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 2}) + ". Consider anti-takeover provisions.");
+            }
 
             if (industry === 'finance' && age <= 65) {
                 warnings.push("📈 <strong>Regulatory Risk:</strong> The SEC is particularly interested in finance professionals. Expect enhanced scrutiny of your personal expense reports.");
@@ -461,7 +459,7 @@
             }
 
             if (growth > 25) {
-                warnings.push("🚀 <strong>High growth rate alert:</strong> Warning: Your career seems to be a rocketship. Be careful with your capital allocation. ");
+                warnings.push("🚀 <strong>High growth rate alert:</strong> Warning: Your career seems to be a rocketship. Be careful with your capital allocation.");
             }
 
             if (dividendPercent > 15) {
@@ -511,7 +509,7 @@
                 box-shadow: none;
             `;
 
-            // Create ticker section (matches original design exactly)
+            // Create ticker section
             const tickerDiv = document.createElement('div');
             tickerDiv.style.cssText = `
                 font-size: 2em;
@@ -526,14 +524,14 @@
             `;
             tickerDiv.textContent = document.getElementById('displayTicker').textContent;
 
-            // Create metrics container (matches the exact layout)
+            // Create metrics container
             const metricsContainer = document.createElement('div');
             metricsContainer.style.cssText = `
                 background: #ffffff;
                 margin-bottom: 20px;
             `;
 
-            // Add each metric in the EXACT same order as the web interface
+            // Add each metric
             const metrics = [
                 { label: 'Total Market Capitalization', value: document.getElementById('displayMarketCap').textContent },
                 { label: 'Share Price (1M shares outstanding)', value: document.getElementById('displaySharePrice').textContent },
@@ -569,11 +567,11 @@
                 metricsContainer.appendChild(metricDiv);
             });
 
-            // Assemble the container in correct order
+            // Assemble the container
             imageContainer.appendChild(tickerDiv);
             imageContainer.appendChild(metricsContainer);
 
-            // Add warning section if it exists (matches original styling)
+            // Add warning section if it exists
             const warningElement = document.getElementById('displayWarning');
             if (warningElement && warningElement.innerHTML.trim()) {
                 const warningDiv = document.createElement('div');
@@ -603,13 +601,12 @@
             `;
             watermark.textContent = 'nodumbideas.com';
             
-            // Make sure the container can contain absolute positioned elements
             imageContainer.style.position = 'relative';
             imageContainer.appendChild(watermark);
 
             document.body.appendChild(imageContainer);
 
-            // Generate image with optimal settings
+            // Generate image
             html2canvas(imageContainer, {
                 backgroundColor: '#ffffff',
                 scale: 3,
@@ -624,10 +621,8 @@
             }).then(canvas => {
                 console.log('Image generated successfully');
                 
-                // Clean up
                 document.body.removeChild(imageContainer);
 
-                // Download the image
                 const link = document.createElement('a');
                 link.download = `${window.calculationData.tickerName}_IPO_Results.png`;
                 link.href = canvas.toDataURL('image/png', 1.0);
