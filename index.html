@@ -177,7 +177,7 @@
             border-radius: 25px;
             font-weight: bold;
             cursor: pointer;
-            margin: 0 10px;
+            margin: 0 5px;
             transition: opacity 0.3s ease;
         }
 
@@ -203,6 +203,13 @@
             
             .form-section {
                 padding: 20px;
+            }
+            
+            .share-btn {
+                margin: 5px;
+                display: block;
+                width: 200px;
+                margin: 5px auto;
             }
         }
     </style>
@@ -303,6 +310,7 @@
             <div class="share-section">
                 <p><strong>Ready to go public?</strong></p>
                 <button class="share-btn" onclick="shareResults()">Share on X</button>
+                <button class="share-btn" onclick="downloadImage()">Download Image</button>
                 <button class="share-btn" onclick="copyResults()">Copy Results</button>
             </div>
         </div>
@@ -313,6 +321,7 @@
         </div>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script>
         function runCalculation() {
             try {
@@ -378,9 +387,9 @@
                 const annualDividend = salary * (dividendPercent / 100);
                 const dividendYield = (annualDividend / sharePrice) * 100;
 
-                // Create ticker with spaces converted to underscores
+                // Create ticker with spaces converted to underscores (Fixed the extra brace)
                 const cleanTickerName = tickerName.replace(/\s+/g, '_');
-                const ticker = `${cleanTickerName.toUpperCase()}}`;
+                const ticker = `${cleanTickerName.toUpperCase()}`;
 
                 // Update display
                 document.getElementById('displayTicker').textContent = ticker;
@@ -402,7 +411,7 @@
                     ticker,
                     marketCap,
                     sharePrice,
-                    tickerName
+                    tickerName: cleanTickerName
                 };
 
                 console.log('Calculation completed successfully');
@@ -449,6 +458,66 @@
             }
 
             return warnings.slice(0, 2).join('<br><br>');
+        }
+
+        function downloadImage() {
+            if (!window.calculationData) {
+                alert('Please calculate your IPO first!');
+                return;
+            }
+
+            // Check if html2canvas loaded
+            if (typeof html2canvas === 'undefined') {
+                alert('Image generation library not loaded. Please try refreshing the page.');
+                return;
+            }
+
+            console.log('Starting image generation...');
+            
+            const resultsElement = document.getElementById('calculationResults');
+            
+            if (!resultsElement) {
+                alert('Results not found. Please calculate first.');
+                return;
+            }
+
+            // Temporarily hide the share section for cleaner image
+            const shareSection = resultsElement.querySelector('.share-section');
+            const originalDisplay = shareSection ? shareSection.style.display : '';
+            if (shareSection) {
+                shareSection.style.display = 'none';
+            }
+
+            // Generate the image
+            html2canvas(resultsElement, {
+                backgroundColor: '#f8f9fa',
+                scale: 2,
+                useCORS: true,
+                allowTaint: true,
+                logging: false
+            }).then(canvas => {
+                console.log('Image generated successfully');
+                
+                // Restore the share section
+                if (shareSection) {
+                    shareSection.style.display = originalDisplay;
+                }
+
+                // Download the image
+                const link = document.createElement('a');
+                link.download = `${window.calculationData.tickerName}_IPO_Results.png`;
+                link.href = canvas.toDataURL('image/png');
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+            }).catch(error => {
+                console.error('Error generating image:', error);
+                if (shareSection) {
+                    shareSection.style.display = originalDisplay;
+                }
+                alert('Error generating image: ' + error.message);
+            });
         }
 
         function shareResults() {
