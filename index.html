@@ -580,6 +580,23 @@
                 imageContainer.appendChild(warningDiv);
             }
 
+            // Add subtle corner watermark
+            const watermark = document.createElement('div');
+            watermark.style.cssText = `
+                position: absolute;
+                bottom: 10px;
+                right: 15px;
+                color: #ccc;
+                font-size: 11px;
+                font-weight: normal;
+                opacity: 0.6;
+            `;
+            watermark.textContent = 'nodumbideas.com';
+            
+            // Make sure the container can contain absolute positioned elements
+            imageContainer.style.position = 'relative';
+            imageContainer.appendChild(watermark);
+
             document.body.appendChild(imageContainer);
 
             // Generate image with optimal settings
