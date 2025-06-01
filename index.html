@@ -12,7 +12,7 @@
         }
 
         body {
-            font-family: 'Georgia', serif;
+            font-family: 'Roboto', serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
@@ -216,13 +216,8 @@
 
         <div class="form-section">
             <div class="input-group">
-                <label for="firstName">First Name</label>
-                <input type="text" id="firstName" placeholder="Sarah">
-            </div>
-
-            <div class="input-group">
-                <label for="lastName">Last Name</label>
-                <input type="text" id="lastName" placeholder="Smith">
+                <label for="tname">Ticker Name</label>
+                <input type="text" id="tname" placeholder="JOHN_SMITH">
             </div>
 
             <div class="two-column">
@@ -270,6 +265,11 @@
                 <input type="number" id="growth" placeholder="3" min="0" max="20" step="0.1">
             </div>
 
+            <div class="input-group">
+                <label for="dividend">Share of salary you'll pay as a dividend(%)</label>
+                <input type="number" id="dividend" placeholder="5" min="0" max="100" step="0.1">
+            </div>
+
             <button class="calculate-btn" onclick="calculateIPO()">
                 🚀 Calculate My Market Value
             </button>
@@ -314,20 +314,20 @@
 
         <div class="footer">
             <p>⚠️ Not actual financial advice. Please don't actually sell equity in yourself.</p>
-            <p>Inspired by the brilliant economic speculation at <a href="#" style="color: #667eea;">your Substack</a></p>
+            <p>Inspired by the Personal IPO concept from<a href="nodumbideas.com" style="color: #667eea;">No Dumb Ideas</a></p>
         </div>
     </div>
 
     <script>
         function calculateIPO() {
             // Get form values
-            const firstName = document.getElementById('firstName').value || 'John';
-            const lastName = document.getElementById('lastName').value || 'Doe';
+            const tname = document.getElementById('tname').value || 'Doe';
             const salary = parseFloat(document.getElementById('salary').value) || 0;
             const age = parseInt(document.getElementById('age').value) || 30;
             const education = document.getElementById('education').value;
             const industry = document.getElementById('industry').value;
             const growth = parseFloat(document.getElementById('growth').value) || 3;
+            const dividend = parseFloat(document.getElementById('dividend').value) || 5;
 
             if (salary <= 0) {
                 alert('Please enter a valid salary amount!');
@@ -364,11 +364,11 @@
             
             // Industry multipliers
             const industryMultipliers = {
-                'tech': 1.3,
-                'finance': 1.4,
-                'consulting': 1.2,
-                'healthcare': 1.1,
-                'education': 0.7,
+                'tech': 1,
+                'finance': 1,
+                'consulting': 1,
+                'healthcare': 1,
+                'education': 0.8,
                 'nonprofit': 0.6,
                 'government': 0.8,
                 'retail': 0.9,
@@ -379,11 +379,11 @@
             
             const marketCap = presentValue * multiplier;
             const sharePrice = marketCap / 1000000; // 1M shares
-            const annualDividend = salary * 0.05; // 5% dividend
+            const annualDividend = salary * (dividend/100); // set dividend
             const dividendYield = (annualDividend / sharePrice) * 100;
 
             // Create ticker symbol
-            const ticker = `$${firstName.toUpperCase()}_${lastName.toUpperCase()}`;
+            const ticker = `$${tname.toUpperCase()}_${industry.toUpperCase()}`;
 
             // Update results
             document.getElementById('ticker').textContent = ticker;
@@ -394,7 +394,7 @@
             document.getElementById('yearsToRetirement').textContent = yearsToRetirement;
 
             // Generate witty warning based on results
-            let warningText = generateWarning(marketCap, sharePrice, industry, education, age);
+            let warningText = generateWarning(marketCap, sharePrice, industry, education, age, dividend);
             document.getElementById('warning').innerHTML = warningText;
 
             // Show results
@@ -406,8 +406,7 @@
                 ticker,
                 marketCap,
                 sharePrice,
-                firstName,
-                lastName
+                tname
             };
         }
 
@@ -431,7 +430,7 @@
             }
 
             if (education === 'dropout') {
-                warnings.push("💡 <strong>Meme Stock Potential:</strong> College dropout status could attract retail investors hoping you're the next Steve Jobs. Manage expectations carefully.");
+                warnings.push("💡 <strong>Meme Stock Potential:</strong> Dropout status could attract retail investors hoping you're the next Mark Zuckerberg. Manage expectations carefully.");
             }
 
             if (age > 50) {
@@ -453,7 +452,7 @@
             if (!window.ipoResults) return;
             
             const { ticker, sharePrice, marketCap } = window.ipoResults;
-            const text = `I just IPO'd myself! 📈\n\nTicker: ${ticker}\nShare Price: $${sharePrice.toFixed(2)}\nMarket Cap: $${marketCap.toLocaleString()}\n\nCalculate your own market value:`;
+            const text = `I just IPO'd myself! 📈\n\nTicker: ${ticker}\nShare Price: $${sharePrice.toFixed(2)}\nMarket Cap: $${marketCap.toLocaleString()}\n\nCalculate your own market value: https://nodumbideas.github.io/personal-ipo-calculator/`;
             const url = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(text);
             window.open(url, '_blank');
         }
@@ -461,8 +460,8 @@
         function copyToClipboard() {
             if (!window.ipoResults) return;
             
-            const { ticker, sharePrice, marketCap, firstName } = window.ipoResults;
-            const text = `${firstName}'s Personal IPO Results:\n\nTicker: ${ticker}\nShare Price: $${sharePrice.toFixed(2)}\nMarket Cap: $${marketCap.toLocaleString()}\n\nNot actual financial advice!`;
+            const { ticker, sharePrice, marketCap, tname } = window.ipoResults;
+            const text = `I just IPO'd myself! 📈\n\nTicker: ${ticker}\nShare Price: $${sharePrice.toFixed(2)}\nMarket Cap: $${marketCap.toLocaleString()}\n\nCalculate your own market value: https://nodumbideas.github.io/personal-ipo-calculator/`;
             
             navigator.clipboard.writeText(text).then(() => {
                 alert('Results copied to clipboard!');
