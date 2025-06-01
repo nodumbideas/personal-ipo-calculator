@@ -441,8 +441,12 @@
                 warnings.push("💡 <strong>Meme Stock Potential:</strong> Dropout status could attract retail investors hoping you're the next Mark Zuckerberg. Manage expectations carefully.");
             }
 
-            if (age > 50) {
+            if (age > 50 && age < 65) {
                 warnings.push("⏰ <strong>Limited Growth Runway:</strong> Approaching retirement may limit your appeal to growth investors. Consider pivoting to dividend-focused strategy.");
+            }
+
+            if (age >= 65) {
+                warnings.push("🚨 <strong>Retirement alert:</strong> Valuations are extremely unpredictable post-retirement. Please consult a personal investment banker for valuations.");
             }
 
             if (age < 25) {
@@ -488,36 +492,43 @@
                 shareSection.style.display = 'none';
             }
 
-            // Generate the image
-            html2canvas(resultsElement, {
-                backgroundColor: '#f8f9fa',
-                scale: 2,
-                useCORS: true,
-                allowTaint: true,
-                logging: false
-            }).then(canvas => {
-                console.log('Image generated successfully');
-                
-                // Restore the share section
-                if (shareSection) {
-                    shareSection.style.display = originalDisplay;
-                }
+            // Force a small delay to ensure DOM is fully updated
+            setTimeout(() => {
+                // Generate the image with better settings for styling
+                html2canvas(resultsElement, {
+                    backgroundColor: '#f8f9fa',
+                    scale: 2,
+                    useCORS: true,
+                    allowTaint: true,
+                    logging: false,
+                    width: resultsElement.scrollWidth,
+                    height: resultsElement.scrollHeight,
+                    foreignObjectRendering: false, // Better font rendering
+                    imageTimeout: 15000 // Longer timeout
+                }).then(canvas => {
+                    console.log('Image generated successfully');
+                    
+                    // Restore the share section
+                    if (shareSection) {
+                        shareSection.style.display = originalDisplay;
+                    }
 
-                // Download the image
-                const link = document.createElement('a');
-                link.download = `${window.calculationData.tickerName}_IPO_Results.png`;
-                link.href = canvas.toDataURL('image/png');
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                
-            }).catch(error => {
-                console.error('Error generating image:', error);
-                if (shareSection) {
-                    shareSection.style.display = originalDisplay;
-                }
-                alert('Error generating image: ' + error.message);
-            });
+                    // Download the image
+                    const link = document.createElement('a');
+                    link.download = `${window.calculationData.tickerName}_IPO_Results.png`;
+                    link.href = canvas.toDataURL('image/png');
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    
+                }).catch(error => {
+                    console.error('Error generating image:', error);
+                    if (shareSection) {
+                        shareSection.style.display = originalDisplay;
+                    }
+                    alert('Error generating image: ' + error.message);
+                });
+            }, 100); // Small delay to ensure styling is applied
         }
 
         function shareResults() {
