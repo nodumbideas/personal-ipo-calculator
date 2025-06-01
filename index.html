@@ -426,19 +426,19 @@
         function createWarning(marketCap, sharePrice, industry, education, age, dividendPercent) {
             const warnings = [];
 
-            if (marketCap < 50000) {
+            if (marketCap < 50000 && age < 65) {
                 warnings.push("🚨 <strong>Low Valuation Risk:</strong> At your current share price, your mother could acquire a controlling stake for just $" + (sharePrice * 500000).toLocaleString() + ". Consider anti-takeover provisions.");
             }
 
-            if (industry === 'finance') {
+            if (industry === 'finance' && age < 65) {
                 warnings.push("📈 <strong>Regulatory Risk:</strong> The SEC is particularly interested in finance professionals. Expect enhanced scrutiny of your personal expense reports.");
             }
 
-            if (education === 'phd') {
+            if (education === 'phd' && age < 65) {
                 warnings.push("🎓 <strong>Overvaluation Warning:</strong> PhD premium may not be sustainable. Market expects you to revolutionize your field, not just teach undergrads.");
             }
 
-            if (education === 'dropout') {
+            if (education === 'dropout' && age < 65) {
                 warnings.push("💡 <strong>Meme Stock Potential:</strong> Dropout status could attract retail investors hoping you're the next Mark Zuckerberg. Manage expectations carefully.");
             }
 
@@ -454,7 +454,7 @@
                 warnings.push("🎯 <strong>High Beta Risk:</strong> Your young age makes you extremely volatile. Consider adding voting rights to shares to drive value.");
             }
 
-            if (dividendPercent > 15) {
+            if (dividendPercent > 15 && age < 65) {
                 warnings.push("💸 <strong>Unsustainable Payout:</strong> Your dividend rate is extremely high. Investors may question your ability to maintain this payout ratio long-term.");
             }
 
@@ -485,7 +485,7 @@
                 return;
             }
 
-            // Create a temporary container with a clean, high-contrast design
+            // Create a temporary container that matches the exact web interface design
             const imageContainer = document.createElement('div');
             imageContainer.style.cssText = `
                 position: absolute;
@@ -494,39 +494,36 @@
                 width: 600px;
                 background: #ffffff;
                 color: #000000;
-                font-family: 'Arial', sans-serif;
-                padding: 30px;
-                border: 3px solid #333333;
+                font-family: 'Roboto', Arial, sans-serif;
+                padding: 40px;
+                border: 2px solid #e0e0e0;
                 border-radius: 15px;
                 box-shadow: none;
             `;
 
-            // Create ticker section
+            // Create ticker section (matches original design exactly)
             const tickerDiv = document.createElement('div');
             tickerDiv.style.cssText = `
-                font-size: 36px;
+                font-size: 2em;
                 font-weight: bold;
-                color: #1a1a1a;
+                color: #2c3e50;
                 text-align: center;
-                margin-bottom: 25px;
-                padding: 20px;
-                background: #f0f0f0;
-                border: 2px solid #666666;
+                margin-bottom: 20px;
+                padding: 15px;
+                background: #f8f9fa;
                 border-radius: 10px;
+                border-left: 5px solid #667eea;
             `;
             tickerDiv.textContent = document.getElementById('displayTicker').textContent;
 
-            // Create metrics section
+            // Create metrics container (matches the exact layout)
             const metricsContainer = document.createElement('div');
             metricsContainer.style.cssText = `
                 background: #ffffff;
-                border: 2px solid #cccccc;
-                border-radius: 8px;
-                padding: 20px;
                 margin-bottom: 20px;
             `;
 
-            // Add each metric with high contrast
+            // Add each metric in the EXACT same order as the web interface
             const metrics = [
                 { label: 'Total Market Capitalization', value: document.getElementById('displayMarketCap').textContent },
                 { label: 'Share Price (1M shares outstanding)', value: document.getElementById('displaySharePrice').textContent },
@@ -539,24 +536,21 @@
                 metricDiv.style.cssText = `
                     display: flex;
                     justify-content: space-between;
-                    align-items: center;
                     padding: 15px 0;
-                    ${index < metrics.length - 1 ? 'border-bottom: 2px solid #e0e0e0;' : ''}
-                    font-size: 16px;
+                    ${index < metrics.length - 1 ? 'border-bottom: 1px solid #e0e0e0;' : ''}
                 `;
 
                 const labelSpan = document.createElement('span');
                 labelSpan.style.cssText = `
                     font-weight: bold;
-                    color: #1a1a1a;
+                    color: #2c3e50;
                 `;
                 labelSpan.textContent = metric.label;
 
                 const valueSpan = document.createElement('span');
                 valueSpan.style.cssText = `
+                    color: #27ae60;
                     font-weight: bold;
-                    color: #006600;
-                    font-size: 18px;
                 `;
                 valueSpan.textContent = metric.value;
 
@@ -565,45 +559,30 @@
                 metricsContainer.appendChild(metricDiv);
             });
 
-            // Add warning section if it exists
+            // Add warning section if it exists (matches original styling)
             const warningElement = document.getElementById('displayWarning');
             if (warningElement && warningElement.innerHTML.trim()) {
                 const warningDiv = document.createElement('div');
                 warningDiv.style.cssText = `
-                    background: #fff8dc;
-                    border: 3px solid #daa520;
-                    border-radius: 8px;
+                    background: #fff3cd;
+                    border: 2px solid #ffeaa7;
+                    border-radius: 10px;
                     padding: 20px;
                     margin-top: 20px;
-                    color: #8b4513;
-                    font-size: 14px;
-                    line-height: 1.4;
+                    color: #856404;
+                    line-height: 1.5;
                 `;
                 warningDiv.innerHTML = warningElement.innerHTML;
                 imageContainer.appendChild(warningDiv);
             }
 
-            // Add footer
-            const footerDiv = document.createElement('div');
-            footerDiv.style.cssText = `
-                text-align: center;
-                margin-top: 25px;
-                padding-top: 20px;
-                border-top: 2px solid #cccccc;
-                color: #666666;
-                font-size: 12px;
-                font-style: italic;
-            `;
-            footerDiv.textContent = 'Personal IPO Calculator - Not financial advice';
-
-            // Assemble the container
+            // Assemble the container in correct order
             imageContainer.appendChild(tickerDiv);
             imageContainer.appendChild(metricsContainer);
-            imageContainer.appendChild(footerDiv);
 
             document.body.appendChild(imageContainer);
 
-            // Generate image with optimal settings for contrast
+            // Generate image with optimal settings
             html2canvas(imageContainer, {
                 backgroundColor: '#ffffff',
                 scale: 3,
@@ -611,37 +590,20 @@
                 allowTaint: false,
                 width: 600,
                 height: imageContainer.scrollHeight,
-                logging: true,
+                logging: false,
                 imageTimeout: 20000,
                 removeContainer: false,
-                foreignObjectRendering: false,
-                onrendered: function() {
-                    console.log('Rendering complete');
-                }
+                foreignObjectRendering: false
             }).then(canvas => {
                 console.log('Image generated successfully');
-                
-                // Enhance contrast by drawing on a new canvas
-                const enhancedCanvas = document.createElement('canvas');
-                enhancedCanvas.width = canvas.width;
-                enhancedCanvas.height = canvas.height;
-                const ctx = enhancedCanvas.getContext('2d');
-                
-                // Fill with solid white background
-                ctx.fillStyle = '#ffffff';
-                ctx.fillRect(0, 0, enhancedCanvas.width, enhancedCanvas.height);
-                
-                // Draw the original canvas with higher opacity
-                ctx.globalAlpha = 1.0;
-                ctx.drawImage(canvas, 0, 0);
                 
                 // Clean up
                 document.body.removeChild(imageContainer);
 
-                // Download the enhanced image
+                // Download the image
                 const link = document.createElement('a');
                 link.download = `${window.calculationData.tickerName}_IPO_Results.png`;
-                link.href = enhancedCanvas.toDataURL('image/png', 1.0);
+                link.href = canvas.toDataURL('image/png', 1.0);
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
