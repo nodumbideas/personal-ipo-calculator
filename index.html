@@ -426,19 +426,19 @@
         function createWarning(marketCap, sharePrice, industry, education, age, dividendPercent) {
             const warnings = [];
 
-            if (marketCap < 50000 && age < 65) {
+            if (marketCap < 50000) {
                 warnings.push("🚨 <strong>Low Valuation Risk:</strong> At your current share price, your mother could acquire a controlling stake for just $" + (sharePrice * 500000).toLocaleString() + ". Consider anti-takeover provisions.");
             }
 
-            if (industry === 'finance' && age < 65) {
+            if (industry === 'finance') {
                 warnings.push("📈 <strong>Regulatory Risk:</strong> The SEC is particularly interested in finance professionals. Expect enhanced scrutiny of your personal expense reports.");
             }
 
-            if (education === 'phd' && age < 65) {
+            if (education === 'phd') {
                 warnings.push("🎓 <strong>Overvaluation Warning:</strong> PhD premium may not be sustainable. Market expects you to revolutionize your field, not just teach undergrads.");
             }
 
-            if (education === 'dropout' && age < 65) {
+            if (education === 'dropout') {
                 warnings.push("💡 <strong>Meme Stock Potential:</strong> Dropout status could attract retail investors hoping you're the next Mark Zuckerberg. Manage expectations carefully.");
             }
 
@@ -454,7 +454,7 @@
                 warnings.push("🎯 <strong>High Beta Risk:</strong> Your young age makes you extremely volatile. Consider adding voting rights to shares to drive value.");
             }
 
-            if (dividendPercent > 15 && age < 65) {
+            if (dividendPercent > 15) {
                 warnings.push("💸 <strong>Unsustainable Payout:</strong> Your dividend rate is extremely high. Investors may question your ability to maintain this payout ratio long-term.");
             }
 
@@ -559,6 +559,10 @@
                 metricsContainer.appendChild(metricDiv);
             });
 
+            // Assemble the container in correct order
+            imageContainer.appendChild(tickerDiv);
+            imageContainer.appendChild(metricsContainer);
+
             // Add warning section if it exists (matches original styling)
             const warningElement = document.getElementById('displayWarning');
             if (warningElement && warningElement.innerHTML.trim()) {
@@ -575,10 +579,6 @@
                 warningDiv.innerHTML = warningElement.innerHTML;
                 imageContainer.appendChild(warningDiv);
             }
-
-            // Assemble the container in correct order
-            imageContainer.appendChild(tickerDiv);
-            imageContainer.appendChild(metricsContainer);
 
             document.body.appendChild(imageContainer);
 
