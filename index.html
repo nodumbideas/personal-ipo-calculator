@@ -485,114 +485,171 @@
                 return;
             }
 
-            // Hide share section temporarily
-            const shareSection = resultsElement.querySelector('.share-section');
-            const originalDisplay = shareSection ? shareSection.style.display : '';
-            if (shareSection) {
-                shareSection.style.display = 'none';
-            }
+            // Create a temporary container with a clean, high-contrast design
+            const imageContainer = document.createElement('div');
+            imageContainer.style.cssText = `
+                position: absolute;
+                left: -9999px;
+                top: 0;
+                width: 600px;
+                background: #ffffff;
+                color: #000000;
+                font-family: 'Arial', sans-serif;
+                padding: 30px;
+                border: 3px solid #333333;
+                border-radius: 15px;
+                box-shadow: none;
+            `;
 
-            // Create a copy of the results element with inline styles for better html2canvas compatibility
-            const clonedElement = resultsElement.cloneNode(true);
-            clonedElement.style.position = 'absolute';
-            clonedElement.style.left = '-9999px';
-            clonedElement.style.top = '0';
-            clonedElement.style.width = '600px';
-            clonedElement.style.background = '#ffffff';
-            clonedElement.style.color = '#000000';
-            clonedElement.style.fontFamily = 'Arial, sans-serif';
-            clonedElement.style.padding = '40px';
-            clonedElement.style.borderRadius = '15px';
-            clonedElement.style.border = '2px solid #e0e0e0';
-            
-            // Apply inline styles to child elements for better rendering
-            const ticker = clonedElement.querySelector('.ticker');
-            if (ticker) {
-                ticker.style.fontSize = '2em';
-                ticker.style.fontWeight = 'bold';
-                ticker.style.color = '#2c3e50';
-                ticker.style.textAlign = 'center';
-                ticker.style.marginBottom = '20px';
-                ticker.style.padding = '15px';
-                ticker.style.background = '#f8f9fa';
-                ticker.style.borderRadius = '10px';
-                ticker.style.borderLeft = '5px solid #667eea';
-            }
+            // Create ticker section
+            const tickerDiv = document.createElement('div');
+            tickerDiv.style.cssText = `
+                font-size: 36px;
+                font-weight: bold;
+                color: #1a1a1a;
+                text-align: center;
+                margin-bottom: 25px;
+                padding: 20px;
+                background: #f0f0f0;
+                border: 2px solid #666666;
+                border-radius: 10px;
+            `;
+            tickerDiv.textContent = document.getElementById('displayTicker').textContent;
 
-            const labels = clonedElement.querySelectorAll('.metric-label');
-            labels.forEach(label => {
-                label.style.fontWeight = 'bold';
-                label.style.color = '#2c3e50';
+            // Create metrics section
+            const metricsContainer = document.createElement('div');
+            metricsContainer.style.cssText = `
+                background: #ffffff;
+                border: 2px solid #cccccc;
+                border-radius: 8px;
+                padding: 20px;
+                margin-bottom: 20px;
+            `;
+
+            // Add each metric with high contrast
+            const metrics = [
+                { label: 'Total Market Capitalization', value: document.getElementById('displayMarketCap').textContent },
+                { label: 'Share Price (1M shares outstanding)', value: document.getElementById('displaySharePrice').textContent },
+                { label: 'Annual Dividend', value: document.getElementById('displayDividend').textContent },
+                { label: 'Years to Retirement', value: document.getElementById('displayRetirement').textContent }
+            ];
+
+            metrics.forEach((metric, index) => {
+                const metricDiv = document.createElement('div');
+                metricDiv.style.cssText = `
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 15px 0;
+                    ${index < metrics.length - 1 ? 'border-bottom: 2px solid #e0e0e0;' : ''}
+                    font-size: 16px;
+                `;
+
+                const labelSpan = document.createElement('span');
+                labelSpan.style.cssText = `
+                    font-weight: bold;
+                    color: #1a1a1a;
+                `;
+                labelSpan.textContent = metric.label;
+
+                const valueSpan = document.createElement('span');
+                valueSpan.style.cssText = `
+                    font-weight: bold;
+                    color: #006600;
+                    font-size: 18px;
+                `;
+                valueSpan.textContent = metric.value;
+
+                metricDiv.appendChild(labelSpan);
+                metricDiv.appendChild(valueSpan);
+                metricsContainer.appendChild(metricDiv);
             });
 
-            const values = clonedElement.querySelectorAll('.metric-value');
-            values.forEach(value => {
-                value.style.color = '#27ae60';
-                value.style.fontWeight = 'bold';
-            });
-
-            const metrics = clonedElement.querySelectorAll('.metric');
-            metrics.forEach(metric => {
-                metric.style.display = 'flex';
-                metric.style.justifyContent = 'space-between';
-                metric.style.padding = '15px 0';
-                metric.style.borderBottom = '1px solid #e0e0e0';
-            });
-
-            const warning = clonedElement.querySelector('.warning');
-            if (warning) {
-                warning.style.background = '#fff3cd';
-                warning.style.border = '2px solid #ffeaa7';
-                warning.style.borderRadius = '10px';
-                warning.style.padding = '20px';
-                warning.style.marginTop = '20px';
-                warning.style.color = '#856404';
+            // Add warning section if it exists
+            const warningElement = document.getElementById('displayWarning');
+            if (warningElement && warningElement.innerHTML.trim()) {
+                const warningDiv = document.createElement('div');
+                warningDiv.style.cssText = `
+                    background: #fff8dc;
+                    border: 3px solid #daa520;
+                    border-radius: 8px;
+                    padding: 20px;
+                    margin-top: 20px;
+                    color: #8b4513;
+                    font-size: 14px;
+                    line-height: 1.4;
+                `;
+                warningDiv.innerHTML = warningElement.innerHTML;
+                imageContainer.appendChild(warningDiv);
             }
 
-            // Remove share section from clone
-            const clonedShareSection = clonedElement.querySelector('.share-section');
-            if (clonedShareSection) {
-                clonedShareSection.remove();
-            }
+            // Add footer
+            const footerDiv = document.createElement('div');
+            footerDiv.style.cssText = `
+                text-align: center;
+                margin-top: 25px;
+                padding-top: 20px;
+                border-top: 2px solid #cccccc;
+                color: #666666;
+                font-size: 12px;
+                font-style: italic;
+            `;
+            footerDiv.textContent = 'Personal IPO Calculator - Not financial advice';
 
-            document.body.appendChild(clonedElement);
+            // Assemble the container
+            imageContainer.appendChild(tickerDiv);
+            imageContainer.appendChild(metricsContainer);
+            imageContainer.appendChild(footerDiv);
 
-            // Generate image with better options
-            html2canvas(clonedElement, {
+            document.body.appendChild(imageContainer);
+
+            // Generate image with optimal settings for contrast
+            html2canvas(imageContainer, {
                 backgroundColor: '#ffffff',
-                scale: 2,
+                scale: 3,
                 useCORS: true,
                 allowTaint: false,
                 width: 600,
-                height: clonedElement.scrollHeight,
-                logging: false,
-                imageTimeout: 15000,
+                height: imageContainer.scrollHeight,
+                logging: true,
+                imageTimeout: 20000,
                 removeContainer: false,
-                foreignObjectRendering: false // Try with this disabled
+                foreignObjectRendering: false,
+                onrendered: function() {
+                    console.log('Rendering complete');
+                }
             }).then(canvas => {
                 console.log('Image generated successfully');
                 
+                // Enhance contrast by drawing on a new canvas
+                const enhancedCanvas = document.createElement('canvas');
+                enhancedCanvas.width = canvas.width;
+                enhancedCanvas.height = canvas.height;
+                const ctx = enhancedCanvas.getContext('2d');
+                
+                // Fill with solid white background
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, enhancedCanvas.width, enhancedCanvas.height);
+                
+                // Draw the original canvas with higher opacity
+                ctx.globalAlpha = 1.0;
+                ctx.drawImage(canvas, 0, 0);
+                
                 // Clean up
-                document.body.removeChild(clonedElement);
-                if (shareSection) {
-                    shareSection.style.display = originalDisplay;
-                }
+                document.body.removeChild(imageContainer);
 
-                // Download the image
+                // Download the enhanced image
                 const link = document.createElement('a');
                 link.download = `${window.calculationData.tickerName}_IPO_Results.png`;
-                link.href = canvas.toDataURL('image/png', 1.0);
+                link.href = enhancedCanvas.toDataURL('image/png', 1.0);
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
                 
             }).catch(error => {
                 console.error('Error generating image:', error);
-                document.body.removeChild(clonedElement);
-                if (shareSection) {
-                    shareSection.style.display = originalDisplay;
-                }
-                alert('Error generating image. This might be due to browser restrictions or the html2canvas library. Please try using a different browser or taking a screenshot manually.');
+                document.body.removeChild(imageContainer);
+                alert('Error generating image: ' + error.message);
             });
         }
 
