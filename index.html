@@ -216,26 +216,26 @@
 
         <div class="form-section">
             <div class="input-group">
-                <label for="tname">Ticker Name</label>
-                <input type="text" id="tname" placeholder="JOHN_SMITH">
+                <label for="tickerName">Ticker Name</label>
+                <input type="text" id="tickerName" placeholder="JOHN_SMITH" value="">
             </div>
 
             <div class="two-column">
                 <div class="input-group">
-                    <label for="salary">Annual Salary ($)</label>
-                    <input type="number" id="salary" placeholder="85000" min="0">
+                    <label for="annualSalary">Annual Salary ($)</label>
+                    <input type="number" id="annualSalary" placeholder="85000" min="0" value="">
                 </div>
 
                 <div class="input-group">
-                    <label for="age">Current Age</label>
-                    <input type="number" id="age" placeholder="28" min="18" max="80">
+                    <label for="currentAge">Current Age</label>
+                    <input type="number" id="currentAge" placeholder="28" min="18" max="80" value="">
                 </div>
             </div>
 
             <div class="two-column">
                 <div class="input-group">
-                    <label for="education">Education Level</label>
-                    <select id="education">
+                    <label for="educationLevel">Education Level</label>
+                    <select id="educationLevel">
                         <option value="highschool">High School</option>
                         <option value="bachelor" selected>Bachelor's Degree</option>
                         <option value="master">Master's Degree</option>
@@ -245,8 +245,8 @@
                 </div>
 
                 <div class="input-group">
-                    <label for="industry">Industry</label>
-                    <select id="industry">
+                    <label for="industryType">Industry</label>
+                    <select id="industryType">
                         <option value="tech" selected>Tech</option>
                         <option value="finance">Finance</option>
                         <option value="consulting">Consulting</option>
@@ -261,164 +261,163 @@
             </div>
 
             <div class="input-group">
-                <label for="growth">Expected Annual Salary Growth (%)</label>
-                <input type="number" id="growth" placeholder="3" min="0" max="20" step="0.1">
+                <label for="salaryGrowth">Expected Annual Salary Growth (%)</label>
+                <input type="number" id="salaryGrowth" placeholder="3" min="0" max="20" step="0.1" value="">
             </div>
 
             <div class="input-group">
-                <label for="dividend">Share of salary you'll pay as a dividend(%)</label>
-                <input type="number" id="dividend" placeholder="5" min="0" max="100" step="0.1">
+                <label for="dividendRate">Share of salary you'll pay as a dividend (%)</label>
+                <input type="number" id="dividendRate" placeholder="5" min="0" max="100" step="0.1" value="">
             </div>
 
-            <button class="calculate-btn" onclick="calculateIPO()">
+            <button class="calculate-btn" onclick="runCalculation()">
                 🚀 Calculate My Market Value
             </button>
         </div>
 
-        <div class="results" id="results">
-            <div class="ticker" id="ticker"></div>
+        <div class="results" id="calculationResults">
+            <div class="ticker" id="displayTicker"></div>
             
             <div class="metric">
                 <span class="metric-label">Total Market Capitalization</span>
-                <span class="metric-value" id="marketCap"></span>
+                <span class="metric-value" id="displayMarketCap"></span>
             </div>
             
             <div class="metric">
                 <span class="metric-label">Share Price (1M shares outstanding)</span>
-                <span class="metric-value" id="sharePrice"></span>
+                <span class="metric-value" id="displaySharePrice"></span>
             </div>
             
             <div class="metric">
-                <span class="metric-label">Annual Dividend (5% of salary)</span>
-                <span class="metric-value" id="dividend"></span>
-            </div>
-            
-            <div class="metric">
-                <span class="metric-label">Dividend Yield</span>
-                <span class="metric-value" id="dividendYield"></span>
+                <span class="metric-label">Annual Dividend</span>
+                <span class="metric-value" id="displayDividend"></span>
             </div>
             
             <div class="metric">
                 <span class="metric-label">Years to Retirement</span>
-                <span class="metric-value" id="yearsToRetirement"></span>
+                <span class="metric-value" id="displayRetirement"></span>
             </div>
 
-            <div class="warning" id="warning"></div>
+            <div class="warning" id="displayWarning"></div>
 
             <div class="share-section">
                 <p><strong>Ready to go public?</strong></p>
-                <button class="share-btn" onclick="shareToTwitter()">Share on Twitter</button>
-                <button class="share-btn" onclick="copyToClipboard()">Copy Results</button>
+                <button class="share-btn" onclick="shareResults()">Share on X</button>
+                <button class="share-btn" onclick="copyResults()">Copy Results</button>
             </div>
         </div>
 
         <div class="footer">
-            <p>⚠️ Not actual financial advice. Please don't actually sell equity in yourself.</p>
-            <p>Inspired by the Personal IPO concept from<a href="nodumbideas.com" style="color: #667eea;">No Dumb Ideas</a></p>
+            <p>⚠️ Not actual financial advice. Please don't actually sell equity in yourself based on this.</p>
+            <p>Inspired by the Personal IPO concept from <a href="https://nodumbideas.com" style="color: #667eea;">No Dumb Ideas</a></p>
         </div>
     </div>
 
     <script>
-        function calculateIPO() {
-            // Get form values
-            const tname = document.getElementById('tname').value || 'Doe';
-            const salary = parseFloat(document.getElementById('salary').value) || 0;
-            const age = parseInt(document.getElementById('age').value) || 30;
-            const education = document.getElementById('education').value;
-            const industry = document.getElementById('industry').value;
-            const growth = parseFloat(document.getElementById('growth').value) || 3;
-            const dividend = parseFloat(document.getElementById('dividend').value) || 5;
+        function runCalculation() {
+            try {
+                console.log('Starting calculation...');
+                
+                // Get all form values with completely different approach
+                const tickerName = document.getElementById('tickerName').value.trim() || 'DOE';
+                const salary = parseFloat(document.getElementById('annualSalary').value) || 0;
+                const age = parseInt(document.getElementById('currentAge').value) || 30;
+                const education = document.getElementById('educationLevel').value;
+                const industry = document.getElementById('industryType').value;
+                const growth = parseFloat(document.getElementById('salaryGrowth').value) || 3;
+                const dividendPercent = parseFloat(document.getElementById('dividendRate').value) || 5;
 
-            if (salary <= 0) {
-                alert('Please enter a valid salary amount!');
-                return;
+                console.log('Form values:', { tickerName, salary, age, education, industry, growth, dividendPercent });
+
+                if (salary <= 0) {
+                    alert('Please enter a valid salary amount!');
+                    return;
+                }
+
+                // Calculate metrics
+                const retirementAge = 65;
+                const yearsLeft = Math.max(retirementAge - age, 0);
+                const discountRate = 0.05;
+                const growthRate = growth / 100;
+
+                // Present value calculation - DIVIDENDS ONLY (not total earnings)
+                let totalValue = 0;
+                let currentSalary = salary;
+                
+                for (let year = 0; year < yearsLeft; year++) {
+                    const dividendPayment = currentSalary * (dividendPercent / 100); // Only the dividend portion
+                    const discountFactor = Math.pow(1 + discountRate, year + 1);
+                    totalValue += dividendPayment / discountFactor; // Present value of dividends
+                    currentSalary *= (1 + growthRate);
+                }
+
+                // Multipliers
+                const educationMultipliers = {
+                    'highschool': 0.8,
+                    'bachelor': 1.0,
+                    'master': 1.2,
+                    'phd': 1.4,
+                    'dropout': 0.9
+                };
+                
+                const industryMultipliers = {
+                    'tech': 1.0,
+                    'finance': 1.0,
+                    'consulting': 1.0,
+                    'healthcare': 1.0,
+                    'education': 0.8,
+                    'nonprofit': 0.6,
+                    'government': 0.8,
+                    'retail': 0.9,
+                    'other': 1.0
+                };
+
+                const multiplier = educationMultipliers[education] * industryMultipliers[industry];
+                const marketCap = totalValue * multiplier;
+                const sharePrice = marketCap / 1000000;
+                const annualDividend = salary * (dividendPercent / 100);
+                const dividendYield = (annualDividend / sharePrice) * 100;
+
+                // Create ticker with spaces converted to underscores
+                const cleanTickerName = tickerName.replace(/\s+/g, '_');
+                const ticker = `${cleanTickerName.toUpperCase()}_${industry.toUpperCase()}`;
+
+                // Update display
+                document.getElementById('displayTicker').textContent = ticker;
+                document.getElementById('displayMarketCap').textContent = `$${marketCap.toLocaleString('en-US', {maximumFractionDigits: 0})}`;
+                document.getElementById('displaySharePrice').textContent = `$${sharePrice.toFixed(2)}`;
+                document.getElementById('displayDividend').textContent = `${annualDividend.toLocaleString('en-US', {maximumFractionDigits: 0})}`;
+                document.getElementById('displayRetirement').textContent = yearsLeft;
+
+                // Generate warning
+                const warningText = createWarning(marketCap, sharePrice, industry, education, age, dividendPercent);
+                document.getElementById('displayWarning').innerHTML = warningText;
+
+                // Show results
+                document.getElementById('calculationResults').classList.add('show');
+                document.getElementById('calculationResults').scrollIntoView({ behavior: 'smooth' });
+
+                // Store for sharing
+                window.calculationData = {
+                    ticker,
+                    marketCap,
+                    sharePrice,
+                    tickerName
+                };
+
+                console.log('Calculation completed successfully');
+                
+            } catch (error) {
+                console.error('Error in calculation:', error);
+                alert('An error occurred during calculation. Please check the console for details.');
             }
-
-            // Calculate basic metrics
-            const retirementAge = 65;
-            const yearsToRetirement = Math.max(retirementAge - age, 0);
-            const discountRate = 0.05; // 5%
-            const growthRate = growth / 100;
-
-            // Calculate present value of future earnings
-            let presentValue = 0;
-            let currentSalary = salary;
-            
-            for (let year = 0; year < yearsToRetirement; year++) {
-                const discountFactor = Math.pow(1 + discountRate, year);
-                presentValue += currentSalary / discountFactor;
-                currentSalary *= (1 + growthRate);
-            }
-
-            // Apply industry and education multipliers
-            let multiplier = 1.0;
-            
-            // Education multipliers
-            const educationMultipliers = {
-                'highschool': 0.8,
-                'bachelor': 1.0,
-                'master': 1.2,
-                'phd': 1.4,
-                'dropout': 0.9 // But with potential!
-            };
-            
-            // Industry multipliers
-            const industryMultipliers = {
-                'tech': 1,
-                'finance': 1,
-                'consulting': 1,
-                'healthcare': 1,
-                'education': 0.8,
-                'nonprofit': 0.6,
-                'government': 0.8,
-                'retail': 0.9,
-                'other': 1.0
-            };
-
-            multiplier = educationMultipliers[education] * industryMultipliers[industry];
-            
-            const marketCap = presentValue * multiplier;
-            const sharePrice = marketCap / 1000000; // 1M shares
-            const annualDividend = salary * (dividend/100); // set dividend
-            const dividendYield = (annualDividend / sharePrice) * 100;
-
-            // Create ticker symbol
-            const ticker = `$${tname.toUpperCase()}_${industry.toUpperCase()}`;
-
-            // Update results
-            document.getElementById('ticker').textContent = ticker;
-            document.getElementById('marketCap').textContent = `$${marketCap.toLocaleString('en-US', {maximumFractionDigits: 0})}`;
-            document.getElementById('sharePrice').textContent = `$${sharePrice.toFixed(2)}`;
-            document.getElementById('dividend').textContent = `$${annualDividend.toLocaleString('en-US', {maximumFractionDigits: 0})}`;
-            document.getElementById('dividendYield').textContent = `${dividendYield.toFixed(1)}%`;
-            document.getElementById('yearsToRetirement').textContent = yearsToRetirement;
-
-            // Generate witty warning based on results
-            let warningText = generateWarning(marketCap, sharePrice, industry, education, age, dividend);
-            document.getElementById('warning').innerHTML = warningText;
-
-            // Show results
-            document.getElementById('results').classList.add('show');
-            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
-
-            // Store results for sharing
-            window.ipoResults = {
-                ticker,
-                marketCap,
-                sharePrice,
-                tname
-            };
         }
 
-        function generateWarning(marketCap, sharePrice, industry, education, age) {
+        function createWarning(marketCap, sharePrice, industry, education, age, dividendPercent) {
             const warnings = [];
 
-            if (marketCap < 500000) {
-                warnings.push("⚠️ <strong>Penny Stock Alert:</strong> Your low market cap makes you vulnerable to pump-and-dump schemes by TikTok finance influencers.");
-            }
-
-            if (sharePrice > 10) {
-                warnings.push("🚨 <strong>High Valuation Risk:</strong> At your current share price, your mother could acquire a controlling stake for just $" + (sharePrice * 500000).toLocaleString() + ". Consider anti-takeover provisions.");
+            if (marketCap < 50000) {
+                warnings.push("🚨 <strong>Low Valuation Risk:</strong> At your current share price, your mother could acquire a controlling stake for just $" + (sharePrice * 500000).toLocaleString() + ". Consider anti-takeover provisions.");
             }
 
             if (industry === 'finance') {
@@ -438,29 +437,33 @@
             }
 
             if (age < 25) {
-                warnings.push("🎯 <strong>High Beta Risk:</strong> Your young age makes you extremely volatile. One career change could crash your stock price 80%.");
+                warnings.push("🎯 <strong>High Beta Risk:</strong> Your young age makes you extremely volatile. Consider adding voting rights to shares to drive value.");
+            }
+
+            if (dividendPercent > 15) {
+                warnings.push("💸 <strong>Unsustainable Payout:</strong> Your dividend rate is extremely high. Investors may question your ability to maintain this payout ratio long-term.");
             }
 
             if (warnings.length === 0) {
                 warnings.push("✅ <strong>Solid Investment Grade:</strong> Congratulations! You appear to be a stable, blue-chip human asset. Suitable for pension fund portfolios.");
             }
 
-            return warnings.slice(0, 2).join('<br><br>'); // Limit to 2 warnings max
+            return warnings.slice(0, 2).join('<br><br>');
         }
 
-        function shareToTwitter() {
-            if (!window.ipoResults) return;
+        function shareResults() {
+            if (!window.calculationData) return;
             
-            const { ticker, sharePrice, marketCap } = window.ipoResults;
+            const { ticker, sharePrice, marketCap } = window.calculationData;
             const text = `I just IPO'd myself! 📈\n\nTicker: ${ticker}\nShare Price: $${sharePrice.toFixed(2)}\nMarket Cap: $${marketCap.toLocaleString()}\n\nCalculate your own market value: https://nodumbideas.github.io/personal-ipo-calculator/`;
             const url = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(text);
             window.open(url, '_blank');
         }
 
-        function copyToClipboard() {
-            if (!window.ipoResults) return;
+        function copyResults() {
+            if (!window.calculationData) return;
             
-            const { ticker, sharePrice, marketCap, tname } = window.ipoResults;
+            const { ticker, sharePrice, marketCap, tickerName } = window.calculationData;
             const text = `I just IPO'd myself! 📈\n\nTicker: ${ticker}\nShare Price: $${sharePrice.toFixed(2)}\nMarket Cap: $${marketCap.toLocaleString()}\n\nCalculate your own market value: https://nodumbideas.github.io/personal-ipo-calculator/`;
             
             navigator.clipboard.writeText(text).then(() => {
@@ -471,7 +474,7 @@
         // Auto-calculate on enter key
         document.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
-                calculateIPO();
+                runCalculation();
             }
         });
     </script>
