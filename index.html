@@ -448,12 +448,20 @@
                 warnings.push("⏰ <strong>Limited Growth Runway:</strong> Approaching retirement may limit your appeal to growth investors. Consider pivoting to dividend-focused strategy.");
             }
 
+            if (industry === 'education' || industry === 'government') {
+                warnings.push("🙅 <strong>Warning:</strong> Your job may actually provide social value. Consider pivoting to consulting to increase market cap.");
+            }
+
             if (age >= 65) {
                 warnings.push("🚨 <strong>Retirement alert:</strong> Valuations are extremely unpredictable post-retirement. Please consult a personal investment banker for valuations.");
             }
 
             if (age < 25) {
                 warnings.push("🎯 <strong>High Beta Risk:</strong> Your young age makes you extremely volatile. Consider adding voting rights to shares to drive value.");
+            }
+
+            if (growth > 25) {
+                warnings.push("🚀 <strong>Warning: Your career seems to be a rocketship!</strong> Expected growth rate is extremely high. Be careful with your capital allocation. ");
             }
 
             if (dividendPercent > 15) {
