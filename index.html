@@ -642,7 +642,7 @@
             if (!window.calculationData) return;
             
             const { ticker, sharePrice, marketCap } = window.calculationData;
-            const text = `I just IPO'd myself! 📈\n\nTicker: ${ticker}\nShare Price: $${sharePrice.toFixed(2)}\nMarket Cap: $${marketCap.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 2})}\n\nCalculate your own market value: https://nodumbideas.github.io/personal-ipo-calculator/`;
+            const text = `I just IPO'd myself! 📈\n\nTicker: ${ticker}\nShare Price: $${sharePrice.toFixed(2)}\nMarket Cap: $${marketCap.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}\n\nCalculate your own market value: https://nodumbideas.github.io/personal-ipo-calculator/`;
             const url = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(text);
             window.open(url, '_blank');
         }
@@ -651,7 +651,7 @@
             if (!window.calculationData) return;
             
             const { ticker, sharePrice, marketCap } = window.calculationData;
-            const text = `I just IPO'd myself! 📈\n\nTicker: ${ticker}\nShare Price: $${sharePrice.toFixed(2)}\nMarket Cap: $${marketCap.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 2})}\n\nCalculate your own market value: https://nodumbideas.github.io/personal-ipo-calculator/`;
+            const text = `I just IPO'd myself! 📈\n\nTicker: ${ticker}\nShare Price: $${sharePrice.toFixed(2)}\nMarket Cap: $${marketCap.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}\n\nCalculate your own market value: https://nodumbideas.github.io/personal-ipo-calculator/`;
             
             navigator.clipboard.writeText(text).then(() => {
                 alert('Results copied to clipboard!');
