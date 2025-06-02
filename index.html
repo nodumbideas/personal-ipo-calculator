@@ -220,7 +220,6 @@
         <div class="header">
             <h1>💰 Personal IPO Calculator</h1>
             <p>Discover your fair market value and prepare for your public offering</p>
-            <p><small>The calculator assumes nonvoting, dividend-paying shares</small></p>
         </div>
 
         <div class="form-section">
@@ -319,6 +318,7 @@
 
         <div class="footer">
             <p>⚠️ Not financial advice. Please don't actually sell equity in yourself.</p>
+            <p>Market cap based the fair value of nonvoting, dividend paying shares</p>
             <p>Based on the Personal IPO concept from <a href="https://nodumbideas.com" style="color: #667eea;">No Dumb Ideas</a></p>
         </div>
     </div>
@@ -436,7 +436,7 @@
             }
 
             if (education === 'phd' && age <= 65) {
-                warnings.push("🎓 <strong>Overvaluation Warning:</strong> PhD premium may not be sustainable. Market expects you to revolutionize your field, not just teach undergrads.");
+                warnings.push("🎓 <strong>Overvaluation Warning:</strong> PhD premium may not be sustainable. Maintain employment in quantiative finance or AI to protect share price.");
             }
 
             if (education === 'dropout' && age <= 65) {
