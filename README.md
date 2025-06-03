@@ -4,7 +4,8 @@ A web application that calculates your "market value" as if you were going publi
 
 ## 🎯 About This Project
 
-I created this calculator to accompany my new article on personal IPOs. The app finds your market value based on discounted future cash flows from dividends - human capital is full of value investors.
+I created this calculator to accompany my new article on [personal IPOs](https://nodumbideas.com/p/the-big-idea-a-personal-ipo)
+. The app finds your market value based on discounted future cash flows from dividends - human capital is full of value investors.
 
 ## 🚀 Features
 
