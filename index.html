@@ -219,7 +219,7 @@
     <div class="container">
         <div class="header">
             <h1>💰 Personal IPO Calculator</h1>
-            <p>Discover your fair market value and prepare for your public offering</p>
+            <p>Discover your fair market value and <a href="https://nodumbideas.com/p/the-big-idea-a-personal-ipo?utm_source=github&utm_medium=calculator" style="color: #667eea;">prepare for your public offering</a></p>
         </div>
 
         <div class="form-section">
@@ -336,7 +336,7 @@
                 const education = document.getElementById('educationLevel').value;
                 const industry = document.getElementById('industryType').value;
                 const growth = parseFloat(document.getElementById('salaryGrowth').value) || 3;
-                const dividendPercent = parseFloat(document.getElementById('dividendRate').value) || 5;
+                const dividendPercent = parseFloat(document.getElementById('dividendRate').value) || 0;
 
                 console.log('Form values:', { tickerName, salary, age, education, industry, growth, dividendPercent });
 
@@ -379,7 +379,7 @@
                     'education': 0.8,
                     'nonprofit': 0.6,
                     'government': 0.8,
-                    'retail': 0.9,
+                    'retail': 1.0,
                     'other': 1.0
                 };
 
@@ -440,7 +440,7 @@
             }
 
             if (education === 'phd' && age <= 65) {
-                warnings.push("🎓 <strong>Overvaluation Warning:</strong> PhD premium may not be sustainable. Maintain employment in quantiative finance or AI to protect share price.");
+                warnings.push("🎓 <strong>Overvaluation Warning:</strong> PhD premium may not be sustainable. Seek employment in quantiative finance or AI to protect share price.");
             }
 
             if (education === 'dropout' && age <= 65) {
