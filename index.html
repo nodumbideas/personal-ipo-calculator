@@ -319,8 +319,7 @@
 
         <div class="footer">
             <p>⚠️ Not financial advice. Please don't actually sell equity in yourself.</p>
-            <p>Market cap based the fair value of nonvoting, dividend paying shares</p>
-            <p>Based on the Personal IPO concept from <a href="https://nodumbideas.com" style="color: #667eea;">No Dumb Ideas</a></p>
+            <p>Based on the <a href="https://nodumbideas.com/p/the-big-idea-a-personal-ipo?utm_source=github&utm_medium=calculator" style="color: #667eea;">Personal IPO concept</a> from <a href="https://nodumbideas.com" style="color: #667eea;">No Dumb Ideas</a></p>
         </div>
     </div>
 
@@ -427,9 +426,13 @@
         function createWarning(marketCap, sharePrice, industry, education, age, dividendPercent, growth) {
             const warnings = [];
 
-            if (marketCap < 50000) {
+            if (marketCap < 50000 && dividendPercent > 0) {
                 const controllingStakeValue = sharePrice * 500000;
                 warnings.push("🚨 <strong>Low Valuation Risk:</strong> At your current share price, your mother could acquire a controlling stake for just $" + controllingStakeValue.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 2}) + ". Consider anti-takeover provisions.");
+            }
+
+            if (dividendPercent === 0) {
+                warnings.push("🚨 <strong>No dividend:</strong> You need to pay a dividend to establish a fair market value. Add a dividend to see your market cap.");
             }
 
             if (industry === 'finance' && age <= 65) {
